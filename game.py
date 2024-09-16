@@ -24,7 +24,7 @@ pontos = 0
 fontePontos = pygame.font.Font(None, 32)
 text_color = (0, 255, 150)
 
-
+# Vidas
 qtdVidas = 3
 vidas = pygame.image.load("img/heart.png")
 vidasRedimencionadas = pygame.transform.scale(vidas, (25,25))
@@ -68,7 +68,6 @@ def mostrarMonstros():
     for i in range(0,len(listaMonstrosRect)):
         screen.blit(listaMonstros[i], listaMonstrosRect[i])
 
-
 def monstroAtirar(qtdMonstrosVivos, listaMonstrosRect):        
     monstroAleatorio = random.randint(0,qtdMonstrosVivos-1)
     tiroMRect.x = listaMonstrosRect[monstroAleatorio].x + 15
@@ -92,7 +91,6 @@ def balaAcertouMonstro():
     
     return acertou
 
- 
 def balaAcertouNave():
     x = naverect.x
     y = naverect.y
@@ -136,25 +134,22 @@ while True:
             tiroRect.x = naverect.x + 9 # + 9 para ficar no centro da nave
             tiroRect.y = 420
         
-        # Verifica se a bala acertou o monstro, se sim, destroi
-    
+        tiroRect.y -= 10
+        tiroMRect.y += 5
+
         if balaAcertouMonstro():
             pontos += 10
+            tiroRect.y = -10
 
         if balaAcertouNave():
             qtdVidas -= 1
-        
 
         # Deixa so um monstro atirar por vez 
         if tiroMRect.y > 430:
             monstroAtirar(len(listaMonstrosRect), listaMonstrosRect)
-    
-        tiroRect.y -= 10
-        tiroMRect.y += 5
 
         text = fontePontos.render("Pontuação: " + str(pontos), True, (255,255,0))
 
-        # mostrarVidas(vidas)
 
         screen.blit(back_image, (0,0))
         screen.blit(nave, naverect)
@@ -163,6 +158,14 @@ while True:
         mostrarMonstros()
         desenharTiroPlayer()
         desenharTiroMonstro()
+        mostrarVidas(qtdVidas)
+
+        if pontos == 200:
+            text = fontePontos.render("YOU WIN", True, (255,255,0))
+            screen.blit(back_image, (0,0))
+            screen.blit(text, (280, 240))
+            time.sleep(0.5)
+            estado = "finish"
         if qtdVidas == 0:
             text = fontePontos.render("GAME OVER", True, (255,255,0))
             screen.blit(back_image, (0,0))
@@ -170,8 +173,6 @@ while True:
             time.sleep(0.5)
             estado = "finish"
       
-        mostrarVidas(qtdVidas)
-
     pygame.display.flip()
 
     time.sleep(0.015)
