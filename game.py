@@ -9,7 +9,6 @@ width, height = 640, 480
 screen = pygame.display.set_mode((width,height))
 back_image = pygame.image.load("img/Space.png")
 
-
 # Imagem Inicial
 inicial = pygame.image.load("img/logo.png")
 inicialRedimencionado = pygame.transform.scale(inicial, (630, 450))
@@ -25,6 +24,7 @@ fontePontos = pygame.font.Font(None, 32)
 text_color = (0, 255, 150)
 
 # Vidas
+
 qtdVidas = 3
 vidas = pygame.image.load("img/heart.png")
 vidasRedimencionadas = pygame.transform.scale(vidas, (25,25))
@@ -62,18 +62,12 @@ def criarMonstro(i):
     if i <= 4:
         monstroRect.x = 85 + i*100
         monstroRect.y = 40
-
-
     elif i >= 5 and i <= 9:
         monstroRect.x = i*100 - 415
         monstroRect.y = 130
-
-
     elif i >= 10 and i <= 14:
         monstroRect.x = i*100 - 915
         monstroRect.y = 220
-
-
     elif i >= 15:
         monstroRect.x = i*100 - 1415
         monstroRect.y = 320
@@ -133,9 +127,9 @@ while True:
 
     keys = pygame.key.get_pressed()
     for event in pygame.event.get():
-        if event.type == pygame.QUIT or qtdVidas == 0:
+        if event.type == pygame.QUIT or estado == "finish":
             pygame.quit()
-            sys.quit()
+            exit()
     if estado == "menu":
         screen.blit(inicialRedimencionado, inicialRect)
         if keys[pygame.K_SPACE]:
@@ -157,11 +151,11 @@ while True:
             tiroRect.y = 420
         
         tiroRect.y -= 10
-        tiroMRect.y += 8
+        tiroMRect.y += 20
 
         if balaAcertouMonstro():
             pontos += 10
-            tiroRect.y = -10
+            tiroRect.y = 10
 
         if balaAcertouNave():
             qtdVidas -= 1
@@ -183,18 +177,26 @@ while True:
         mostrarVidas(qtdVidas)
 
         if pontos == 200:
-            text = fontePontos.render("YOU WIN", True, (255,255,0))
+            text = fontePontos.render("YOU WIN, aperte 'SPACE' PARA REINICIAR", True, (255,255,0))
             screen.blit(back_image, (0,0))
             screen.blit(text, (280, 240))
-            time.sleep(0.5)
-            estado = "finish"
+            estado = "win"
         if qtdVidas == 0:
-            text = fontePontos.render("GAME OVER", True, (255,255,0))
-            screen.blit(back_image, (0,0))
-            screen.blit(text, (250, 240))
-            time.sleep(0.5)
-            estado = "finish"
-      
+            # text = fontePontos.render("GAME OVER, aperte 'SPACE' para reiniciar", True, (255,255,0))
+            # screen.blit(back_image, (0,0))
+            # screen.blit(text, (100, 240))
+            estado = "lose"
+            qtdVidas = 3
+            
+    elif estado == "lose":
+        text = fontePontos.render("GAME OVER, aperte 'P' para reiniciar", True, (255,255,0))
+        screen.blit(back_image, (0,0))
+        screen.blit(text, (100, 240))
+        
+        if keys[pygame.K_p]:
+            estado = "menu"
+ 
+    print(estado)
     pygame.display.flip()
-
-    time.sleep(0.015)
+    
+    time.sleep(0.015) 
