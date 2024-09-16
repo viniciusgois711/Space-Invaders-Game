@@ -52,17 +52,39 @@ def desenharTiroPlayer():
 listaMonstrosRect = []
 listaMonstros = []
 
-def criarMonstro():
+def criarMonstro(i):
+
     monstro = pygame.image.load("img/invader0.png")
     monstroRedimencionado = pygame.transform.scale(monstro, (60, 60))
     monstroRect = monstroRedimencionado.get_rect()
-    monstroRect.x = random.randint(10,600)
-    monstroRect.y = random.randint(50,300)
+
+
+    if i <= 4:
+        monstroRect.x = 85 + i*100
+        monstroRect.y = 40
+
+
+    elif i >= 5 and i <= 9:
+        monstroRect.x = i*100 - 415
+        monstroRect.y = 130
+
+
+    elif i >= 10 and i <= 14:
+        monstroRect.x = i*100 - 915
+        monstroRect.y = 220
+
+
+    elif i >= 15:
+        monstroRect.x = i*100 - 1415
+        monstroRect.y = 320
+
+
     listaMonstros.append(monstroRedimencionado)
     listaMonstrosRect.append(monstroRect)
 
+
 for i in range(0, 20):
-    criarMonstro()
+    criarMonstro(i)
 
 def mostrarMonstros():
     for i in range(0,len(listaMonstrosRect)):
@@ -135,7 +157,7 @@ while True:
             tiroRect.y = 420
         
         tiroRect.y -= 10
-        tiroMRect.y += 5
+        tiroMRect.y += 8
 
         if balaAcertouMonstro():
             pontos += 10
