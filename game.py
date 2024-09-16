@@ -7,16 +7,16 @@ pygame.init()
 
 width, height = 640, 480
 screen = pygame.display.set_mode((width,height))
-back_image = pygame.image.load("Space.png")
+back_image = pygame.image.load("img/Space.png")
 
 
 # Imagem Inicial
-inicial = pygame.image.load("logo.png")
+inicial = pygame.image.load("img/logo.png")
 inicialRedimencionado = pygame.transform.scale(inicial, (630, 450))
 inicialRect = inicialRedimencionado.get_rect()
 
 # Nave
-nave = pygame.image.load("ship.png")
+nave = pygame.image.load("img/ship.png")
 naverect = nave.get_rect()
 naverect.x = 320
 naverect.y = 420
@@ -26,14 +26,14 @@ text_color = (0, 255, 150)
 
 
 qtdVidas = 3
-vidas = pygame.image.load("heart.png")
+vidas = pygame.image.load("img/heart.png")
 vidasRedimencionadas = pygame.transform.scale(vidas, (25,25))
 vidasRect = vidasRedimencionadas.get_rect()
 vidasRect.x = 600
 vidasRect.y = 10
 
 # Tiro Monstro
-tiroM = pygame.image.load("bala.png")
+tiroM = pygame.image.load("img/bala.png")
 tiroMRedimencionado = pygame.transform.scale(tiroM, (30,30))
 tiroMRect = tiroMRedimencionado.get_rect()
 
@@ -41,7 +41,7 @@ def desenharTiroMonstro():
     screen.blit(tiroMRedimencionado, tiroMRect)
 
 # Tiro player
-tiro = pygame.image.load("bala.png")
+tiro = pygame.image.load("img/bala.png")
 tiroRedimencionado = pygame.transform.scale(tiro, (30,30))
 tiroRect = tiroRedimencionado.get_rect()
 
@@ -53,7 +53,7 @@ listaMonstrosRect = []
 listaMonstros = []
 
 def criarMonstro():
-    monstro = pygame.image.load("invader0.png")
+    monstro = pygame.image.load("img/invader0.png")
     monstroRedimencionado = pygame.transform.scale(monstro, (60, 60))
     monstroRect = monstroRedimencionado.get_rect()
     monstroRect.x = random.randint(10,600)
