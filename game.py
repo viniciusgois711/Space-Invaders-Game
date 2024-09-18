@@ -11,7 +11,7 @@ back_image = pygame.image.load("img/Space.png")
 
 # Imagem Inicial
 inicial = pygame.image.load("img/logo.png")
-inicialRedimencionado = pygame.transform.scale(inicial, (630, 450))
+inicialRedimencionado = pygame.transform.scale(inicial, (630, 350))
 inicialRect = inicialRedimencionado.get_rect()
 
 # Nave
@@ -52,12 +52,10 @@ def desenharTiroPlayer():
 listaMonstrosRect = []
 listaMonstros = []
 
-def criarMonstro(i):
-
+def desenharMonstro(i):
     monstro = pygame.image.load("img/invader0.png")
     monstroRedimencionado = pygame.transform.scale(monstro, (60, 60))
     monstroRect = monstroRedimencionado.get_rect()
-
 
     if i <= 4:
         monstroRect.x = 85 + i*100
@@ -72,14 +70,14 @@ def criarMonstro(i):
         monstroRect.x = i*100 - 1415
         monstroRect.y = 320
 
-
     listaMonstros.append(monstroRedimencionado)
     listaMonstrosRect.append(monstroRect)
 
+def criarMonstro():
+    for i in range(0, 20):
+        desenharMonstro(i)
 
-for i in range(0, 20):
-    criarMonstro(i)
-
+criarMonstro()
 def mostrarMonstros():
     for i in range(0,len(listaMonstrosRect)):
         screen.blit(listaMonstros[i], listaMonstrosRect[i])
@@ -114,7 +112,6 @@ def balaAcertouNave():
     if tiroMRect.colliderect(crop):
         return True
 
-
 def mostrarVidas(vidas):
     for x in range(0,vidas):    
         vidasRect.x = 600 - x*50
@@ -127,12 +124,14 @@ while True:
 
     keys = pygame.key.get_pressed()
     for event in pygame.event.get():
-        if event.type == pygame.QUIT or estado == "finish":
+        if event.type == pygame.QUIT:
             pygame.quit()
             exit()
     if estado == "menu":
         screen.blit(inicialRedimencionado, inicialRect)
-        if keys[pygame.K_SPACE]:
+        text = fontePontos.render("aperte 'P' para começar",  True, (255,255,0))
+        screen.blit(text, (200, 400))
+        if keys[pygame.K_p]:
             estado = "jogando"
 
     if estado == "jogando":
@@ -151,11 +150,11 @@ while True:
             tiroRect.y = 420
         
         tiroRect.y -= 10
-        tiroMRect.y += 20
+        tiroMRect.y += 5
 
         if balaAcertouMonstro():
             pontos += 10
-            tiroRect.y = 10
+            tiroRect.y = -40
 
         if balaAcertouNave():
             qtdVidas -= 1
@@ -165,7 +164,6 @@ while True:
             monstroAtirar(len(listaMonstrosRect), listaMonstrosRect)
 
         text = fontePontos.render("Pontuação: " + str(pontos), True, (255,255,0))
-
 
         screen.blit(back_image, (0,0))
         screen.blit(nave, naverect)
@@ -177,26 +175,29 @@ while True:
         mostrarVidas(qtdVidas)
 
         if pontos == 200:
-            text = fontePontos.render("YOU WIN, aperte 'SPACE' PARA REINICIAR", True, (255,255,0))
-            screen.blit(back_image, (0,0))
-            screen.blit(text, (280, 240))
-            estado = "win"
+            estado = "acabou"
+            text = fontePontos.render("YOU WIN, aperte 'R' para reiniciar", True, (255,255,0))
+
         if qtdVidas == 0:
-            # text = fontePontos.render("GAME OVER, aperte 'SPACE' para reiniciar", True, (255,255,0))
-            # screen.blit(back_image, (0,0))
-            # screen.blit(text, (100, 240))
-            estado = "lose"
+            estado = "acabou"
+            text = fontePontos.render("GAME OVER, aperte 'R' para reiniciar", True, (255,255,0))
             qtdVidas = 3
             
-    elif estado == "lose":
-        text = fontePontos.render("GAME OVER, aperte 'P' para reiniciar", True, (255,255,0))
-        screen.blit(back_image, (0,0))
-        screen.blit(text, (100, 240))
+    elif estado == "acabou":
         
-        if keys[pygame.K_p]:
+        screen.blit(back_image, (0,0))
+        screen.blit(text, (130, 220))
+        
+        if keys[pygame.K_r]:
+            screen.blit(back_image, (0,0))
+        
             estado = "menu"
- 
-    print(estado)
+            listaMonstros.clear()
+            listaMonstrosRect.clear()
+            pontos = 0
+            vidas = 3
+            criarMonstro()
+        
     pygame.display.flip()
     
     time.sleep(0.015) 
